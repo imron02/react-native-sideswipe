@@ -1,5 +1,5 @@
 /* @flow */
-import { Animated, StyleSheet } from 'react-native';
+import { Animated, StyleSheet, React$Element } from 'react-native';
 
 export type Styles = StyleSheet.Styles;
 
@@ -38,6 +38,14 @@ export type ScrollEvent = {
   },
 };
 
+export type CarouselRenderProps = {
+  itemIndex: number,
+  currentIndex: number,
+  itemCount: number,
+  item: *,
+  animatedValue: Animated.Value,
+};
+
 type CarouselDefaultProps = {
   contentOffset: number,
   data: Array<*>,
@@ -61,12 +69,4 @@ export type CarouselProps = CarouselDefaultProps & {
   style?: Styles,
   flatListStyle?: Styles,
   contentContainerStyle?: Styles,
-};
-
-export type CarouselRenderProps = {
-  itemIndex: number,
-  currentIndex: number,
-  itemCount: number,
-  item: *,
-  animatedValue: Animated.Value,
 };

@@ -5,16 +5,16 @@ import {
   Animated,
   Dimensions,
   FlatList,
-  PanResponder,
-  StyleSheet,
+  PanResponder
 } from 'react-native';
 
 import type {
   CarouselProps,
   GestureEvent,
-  GestureState,
-  ScrollEvent,
+  GestureState
 } from '../types';
+
+import STYLES from './carousel.style';
 
 const { width: screenWidth } = Dimensions.get('window');
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
@@ -27,23 +27,20 @@ type State = {
 };
 
 export default class SideSwipe extends Component<CarouselProps, State> {
-  panResponder: PanResponder;
-  list: typeof FlatList;
-
   static defaultProps = {
     contentOffset: 0,
     data: [],
     extractKey: (item: *, index: number) => `sideswipe-carousel-item-${index}`,
     itemWidth: screenWidth,
-    onEndReached: () => {},
+    onEndReached: () => { },
     onEndReachedThreshold: 0.9,
-    onIndexChange: () => {},
+    onIndexChange: () => { },
     renderItem: () => null,
     shouldCapture: ({ dx }: GestureState) => Math.abs(dx) > 1,
     shouldRelease: () => false,
     threshold: 0,
     useVelocityForIndex: true,
-    useNativeDriver: true,
+    useNativeDriver: true
   };
 
   constructor(props: CarouselProps) {
@@ -62,7 +59,7 @@ export default class SideSwipe extends Component<CarouselProps, State> {
       animatedValue,
       currentIndex,
       itemWidthAnim,
-      scrollPosAnim,
+      scrollPosAnim
     };
   }
 
@@ -71,7 +68,7 @@ export default class SideSwipe extends Component<CarouselProps, State> {
       onMoveShouldSetPanResponder: this.handleGestureCapture,
       onPanResponderMove: this.handleGestureMove,
       onPanResponderRelease: this.handleGestureRelease,
-      onPanResponderTerminationRequest: this.handleGestureTerminationRequest,
+      onPanResponderTerminationRequest: this.handleGestureTerminationRequest
     });
   };
 
@@ -90,65 +87,11 @@ export default class SideSwipe extends Component<CarouselProps, State> {
             this.list.scrollToIndex({
               animated: true,
               index: this.state.currentIndex,
-              viewOffset: contentOffset,
-            }),
-          );
-        },
+              viewOffset: contentOffset
+            }), 100);
+        }
       );
     }
-  };
-
-  render = () => {
-    const {
-      contentContainerStyle,
-      contentOffset,
-      data,
-      extractKey,
-      flatListStyle,
-      renderItem,
-      style,
-    } = this.props;
-    const { animatedValue, currentIndex, scrollPosAnim } = this.state;
-    const dataLength = data.length;
-
-    return (
-      <View
-        style={[{ width: screenWidth }, style]}
-        {...this.panResponder.panHandlers}
-      >
-        <AnimatedFlatList
-          horizontal
-          contentContainerStyle={[
-            { paddingHorizontal: contentOffset },
-            contentContainerStyle,
-          ]}
-          data={data}
-          getItemLayout={this.getItemLayout}
-          keyExtractor={extractKey}
-          initialScrollIndex={currentIndex}
-          ref={this.getRef}
-          scrollEnabled={false}
-          showsHorizontalScrollIndicator={false}
-          style={[styles.flatList, flatListStyle]}
-          onEndReached={this.props.onEndReached}
-          onEndReachedThreshold={this.props.onEndReachedThreshold}
-          scrollEventThrottle={1}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { x: scrollPosAnim } } }],
-            { useNativeDriver: this.props.useNativeDriver },
-          )}
-          renderItem={({ item, index }) =>
-            renderItem({
-              item,
-              currentIndex,
-              itemIndex: index,
-              itemCount: dataLength,
-              animatedValue: animatedValue,
-            })
-          }
-        />
-      </View>
-    );
   };
 
   getRef = (ref: *) => {
@@ -158,10 +101,13 @@ export default class SideSwipe extends Component<CarouselProps, State> {
   };
 
   getItemLayout = (data: Array<*>, index: number) => ({
-    offset: this.props.itemWidth * index + this.props.contentOffset,
+    offset: (this.props.itemWidth * index) + this.props.contentOffset,
     length: this.props.itemWidth,
-    index,
+    index
   });
+
+  panResponder: PanResponder;
+  list: typeof FlatList;
 
   handleGestureTerminationRequest = (e: GestureEvent, s: GestureState) =>
     this.props.shouldRelease(s);
@@ -176,7 +122,7 @@ export default class SideSwipe extends Component<CarouselProps, State> {
 
     this.list.scrollToOffset({
       offset: resolvedOffset,
-      animated: false,
+      animated: false
     });
   };
 
@@ -184,11 +130,9 @@ export default class SideSwipe extends Component<CarouselProps, State> {
     const currentOffset: number =
       this.state.currentIndex * this.props.itemWidth;
     const resolvedOffset: number = currentOffset - dx;
-    const resolvedIndex: number = Math.round(
-      (resolvedOffset +
-        (dx > 0 ? -this.props.threshold : this.props.threshold)) /
-        this.props.itemWidth,
-    );
+    const resolvedIndex: number = Math.round((resolvedOffset +
+      (dx > 0 ? -this.props.threshold : this.props.threshold)) /
+      this.props.itemWidth);
 
     let newIndex: number;
     if (this.props.useVelocityForIndex) {
@@ -200,9 +144,9 @@ export default class SideSwipe extends Component<CarouselProps, State> {
         dx > 0
           ? Math.max(resolvedIndex - velocityDifference, 0)
           : Math.min(
-              resolvedIndex + velocityDifference,
-              this.props.data.length - 1,
-            );
+            resolvedIndex + velocityDifference,
+            this.props.data.length - 1
+          );
     } else {
       newIndex =
         dx > 0
@@ -213,7 +157,7 @@ export default class SideSwipe extends Component<CarouselProps, State> {
     this.list.scrollToIndex({
       index: newIndex,
       animated: true,
-      viewOffset: this.props.contentOffset,
+      viewOffset: this.props.contentOffset
     });
 
     this.setState(
@@ -221,10 +165,65 @@ export default class SideSwipe extends Component<CarouselProps, State> {
       () => this.props.onIndexChange(newIndex),
     );
   };
-}
 
-const styles = StyleSheet.create({
-  flatList: {
-    flexGrow: 1,
-  },
-});
+  renderItem = ({ item, index }) => {
+    const { renderItem, data } = this.props;
+    const { currentIndex, animatedValue } = this.state;
+    const dataLength = data.length;
+
+    return renderItem({
+      item,
+      currentIndex,
+      itemIndex: index,
+      itemCount: dataLength,
+      animatedValue
+    });
+  }
+
+  render = () => {
+    const {
+      contentContainerStyle,
+      contentOffset,
+      data,
+      extractKey,
+      flatListStyle,
+      style,
+      ListFooterComponent,
+      extraData
+    } = this.props;
+    const { currentIndex, scrollPosAnim } = this.state;
+
+    return (
+      <View
+        style={[{ width: screenWidth }, style]}
+        {...this.panResponder.panHandlers}
+      >
+        <AnimatedFlatList
+          extraData={extraData}
+          horizontal
+          contentContainerStyle={[
+            { paddingHorizontal: contentOffset },
+            contentContainerStyle
+          ]}
+          data={data}
+          getItemLayout={this.getItemLayout}
+          keyExtractor={extractKey}
+          initialScrollIndex={currentIndex}
+          ref={this.getRef}
+          scrollEnabled={false}
+          showsHorizontalScrollIndicator={false}
+          style={[STYLES.flatList, flatListStyle]}
+          onEndReached={this.props.onEndReached}
+          onEndReachedThreshold={this.props.onEndReachedThreshold}
+          scrollEventThrottle={1}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: scrollPosAnim } } }],
+            { useNativeDriver: this.props.useNativeDriver },
+          )}
+          renderItem={this.renderItem}
+          ListFooterComponent={ListFooterComponent}
+        />
+      </View>
+    );
+  };
+}
