@@ -1,5 +1,5 @@
 {
-  "name": "react-native-sideswipe",
+  "name": "@mtr-react/react-native-sideswipe",
   "version": "1.4.2",
   "description": "cross-platform react native carousel with sensible defaults",
   "main": "src/index.js",
