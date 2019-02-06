@@ -3,8 +3,8 @@
   "version": "1.4.2",
   "description": "cross-platform react native carousel with sensible defaults",
   "main": "src/index.js",
-  "repository": "https://github.com/kkemple/react-native-sideswipe",
-  "author": "Kurtis Kemple <kurtiskemple@gmail.com>",
+  "repository": "https://github.com/imron02/react-native-sideswipe",
+  "author": "Imron Rosdiana <imron02@gmail.com>",
   "license": "MIT",
   "private": false,
   "scripts": {
@@ -30,6 +30,6 @@
     "lint-staged": "^6.1.0",
     "prettier": "^1.10.2",
     "react": "^16.2.0",
-    "react-native": "^0.52.2"
+    "react-native": "^0.54.1"
   }
 }
