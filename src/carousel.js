@@ -5,14 +5,10 @@ import {
   Animated,
   Dimensions,
   FlatList,
-  PanResponder
+  PanResponder,
 } from 'react-native';
 
-import type {
-  CarouselProps,
-  GestureEvent,
-  GestureState
-} from '../types';
+import type { CarouselProps, GestureEvent, GestureState } from '../types';
 
 import STYLES from './carousel.style';
 
@@ -32,15 +28,15 @@ export default class SideSwipe extends Component<CarouselProps, State> {
     data: [],
     extractKey: (item: *, index: number) => `sideswipe-carousel-item-${index}`,
     itemWidth: screenWidth,
-    onEndReached: () => { },
+    onEndReached: () => {},
     onEndReachedThreshold: 0.9,
-    onIndexChange: () => { },
+    onIndexChange: () => {},
     renderItem: () => null,
     shouldCapture: ({ dx }: GestureState) => Math.abs(dx) > 1,
     shouldRelease: () => false,
     threshold: 0,
     useVelocityForIndex: true,
-    useNativeDriver: true
+    useNativeDriver: true,
   };
 
   constructor(props: CarouselProps) {
@@ -52,14 +48,14 @@ export default class SideSwipe extends Component<CarouselProps, State> {
     const itemWidthAnim: Animated.Value = new Animated.Value(props.itemWidth);
     const animatedValue: Animated.Value = Animated.divide(
       scrollPosAnim,
-      itemWidthAnim,
+      itemWidthAnim
     );
 
     this.state = {
       animatedValue,
       currentIndex,
       itemWidthAnim,
-      scrollPosAnim
+      scrollPosAnim,
     };
   }
 
@@ -68,7 +64,7 @@ export default class SideSwipe extends Component<CarouselProps, State> {
       onMoveShouldSetPanResponder: this.handleGestureCapture,
       onPanResponderMove: this.handleGestureMove,
       onPanResponderRelease: this.handleGestureRelease,
-      onPanResponderTerminationRequest: this.handleGestureTerminationRequest
+      onPanResponderTerminationRequest: this.handleGestureTerminationRequest,
     });
   };
 
@@ -83,12 +79,15 @@ export default class SideSwipe extends Component<CarouselProps, State> {
       this.setState(
         () => ({ currentIndex: index }),
         () => {
-          setTimeout(() =>
-            this.list.scrollToIndex({
-              animated: true,
-              index: this.state.currentIndex,
-              viewOffset: contentOffset
-            }), 100);
+          setTimeout(
+            () =>
+              this.list.scrollToIndex({
+                animated: true,
+                index: this.state.currentIndex,
+                viewOffset: contentOffset,
+              }),
+            100
+          );
         }
       );
     }
@@ -101,9 +100,9 @@ export default class SideSwipe extends Component<CarouselProps, State> {
   };
 
   getItemLayout = (data: Array<*>, index: number) => ({
-    offset: (this.props.itemWidth * index) + this.props.contentOffset,
+    offset: this.props.itemWidth * index + this.props.contentOffset,
     length: this.props.itemWidth,
-    index
+    index,
   });
 
   panResponder: PanResponder;
@@ -122,7 +121,7 @@ export default class SideSwipe extends Component<CarouselProps, State> {
 
     this.list.scrollToOffset({
       offset: resolvedOffset,
-      animated: false
+      animated: false,
     });
   };
 
@@ -130,9 +129,11 @@ export default class SideSwipe extends Component<CarouselProps, State> {
     const currentOffset: number =
       this.state.currentIndex * this.props.itemWidth;
     const resolvedOffset: number = currentOffset - dx;
-    const resolvedIndex: number = Math.round((resolvedOffset +
-      (dx > 0 ? -this.props.threshold : this.props.threshold)) /
-      this.props.itemWidth);
+    const resolvedIndex: number = Math.round(
+      (resolvedOffset +
+        (dx > 0 ? -this.props.threshold : this.props.threshold)) /
+        this.props.itemWidth
+    );
 
     let newIndex: number;
     if (this.props.useVelocityForIndex) {
@@ -144,9 +145,9 @@ export default class SideSwipe extends Component<CarouselProps, State> {
         dx > 0
           ? Math.max(resolvedIndex - velocityDifference, 0)
           : Math.min(
-            resolvedIndex + velocityDifference,
-            this.props.data.length - 1
-          );
+              resolvedIndex + velocityDifference,
+              this.props.data.length - 1
+            );
     } else {
       newIndex =
         dx > 0
@@ -157,12 +158,12 @@ export default class SideSwipe extends Component<CarouselProps, State> {
     this.list.scrollToIndex({
       index: newIndex,
       animated: true,
-      viewOffset: this.props.contentOffset
+      viewOffset: this.props.contentOffset,
     });
 
     this.setState(
       () => ({ currentIndex: newIndex }),
-      () => this.props.onIndexChange(newIndex),
+      () => this.props.onIndexChange(newIndex)
     );
   };
 
@@ -176,9 +177,9 @@ export default class SideSwipe extends Component<CarouselProps, State> {
       currentIndex,
       itemIndex: index,
       itemCount: dataLength,
-      animatedValue
+      animatedValue,
     });
-  }
+  };
 
   render = () => {
     const {
@@ -189,7 +190,7 @@ export default class SideSwipe extends Component<CarouselProps, State> {
       flatListStyle,
       style,
       ListFooterComponent,
-      extraData
+      extraData,
     } = this.props;
     const { currentIndex, scrollPosAnim } = this.state;
 
@@ -203,7 +204,7 @@ export default class SideSwipe extends Component<CarouselProps, State> {
           horizontal
           contentContainerStyle={[
             { paddingHorizontal: contentOffset },
-            contentContainerStyle
+            contentContainerStyle,
           ]}
           data={data}
           getItemLayout={this.getItemLayout}
@@ -218,7 +219,7 @@ export default class SideSwipe extends Component<CarouselProps, State> {
           scrollEventThrottle={1}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { x: scrollPosAnim } } }],
-            { useNativeDriver: this.props.useNativeDriver },
+            { useNativeDriver: this.props.useNativeDriver }
           )}
           renderItem={this.renderItem}
           ListFooterComponent={ListFooterComponent}
