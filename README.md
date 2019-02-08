@@ -108,6 +108,14 @@ type CarouselProps = {
 
   // should we use native driver for animation
   useNativeDriver?: boolean,
+
+  // A marker property for telling the list to re-render (since it implements PureComponent).
+  // Please read this https://facebook.github.io/react-native/docs/flatlist#extradata
+  extraData?: any
+
+  // Rendered at the bottom of all the items. Can be a React Component Class, a render function, 
+  // or a rendered element.
+  ListFooterComponent?: React$Element<*>
 }
 ```
 
