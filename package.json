@@ -9,7 +9,7 @@
   "private": false,
   "scripts": {
     "precommit": "lint-staged",
-    "flow": "glow",
+    "flow": "flow",
     "lint": "prettier --single-quote --trailing-comma=es5 --write \"src/**/*.js\"",
     "contrib:add": "all-contributors add",
     "contrib:build": "all-contributors generate"
@@ -25,8 +25,7 @@
   },
   "devDependencies": {
     "all-contributors-cli": "^4.10.1",
-    "flow-bin": "^0.64.0",
-    "glow": "^1.1.2",
+    "flow-bin": "0.75.0",
     "lint-staged": "^6.1.0",
     "prettier": "^1.10.2",
     "react": "^16.2.0",
