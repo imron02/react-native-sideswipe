@@ -167,7 +167,7 @@ export default class SideSwipe extends Component<CarouselProps, State> {
     );
   };
 
-  renderItem = ({ item, index }) => {
+  renderItem = ({ item, index }: { item: any, index: number }) => {
     const { renderItem, data } = this.props;
     const { currentIndex, animatedValue } = this.state;
     const dataLength = data.length;

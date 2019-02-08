@@ -62,6 +62,7 @@ type CarouselDefaultProps = {
   shouldRelease: GestureState => boolean,
   threshold: number,
   useNativeDriver: boolean,
+  useVelocityForIndex: boolean,
 };
 
 export type CarouselProps = CarouselDefaultProps & {
@@ -69,4 +70,6 @@ export type CarouselProps = CarouselDefaultProps & {
   style?: Styles,
   flatListStyle?: Styles,
   contentContainerStyle?: Styles,
+  extraData?: any,
+  ListFooterComponent?: React$Element | null
 };
